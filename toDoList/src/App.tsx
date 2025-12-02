@@ -10,7 +10,6 @@ function App() {
   return (
     <>
        <div className=" container bg-blue-200 min-h-screen flex justify-center items-center flex-col">
-        
         <TodoBox />
        </div>
     </>

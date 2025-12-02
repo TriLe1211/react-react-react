@@ -10,38 +10,68 @@ export function ProductsBox() {
       setSearchItems(productsData);
     } else {
       const filtered = productsData.filter(item => item.category.toLowerCase() === category.toLowerCase());
+      const button = document.getEle
       setSearchItems(filtered);
     }
   }
+
+ const handleOnChange = (e) => {
+  const query = e.target.value.toLowerCase().trim();
+
+  if (query === "") {
+    setSearchItems(productsData);
+    return;
+  }
+
+  const filtered = productsData.filter(item => {
+    return item.name.toLowerCase().includes(query) ||
+           item.category.toLowerCase().includes(query) ||
+           item.desc.toLowerCase().includes(query);
+  });
+
+  setSearchItems(filtered);
+}
 
   return (
     <div className="w-4/5 h-[600px] rounded-lg shadow-md p-10 bg-[#F2EBBF] flex flex-col justify-start items-center gap-3">
       <div className="title text-3xl font-bold text-[#F06060]">PRODUCTS LIST</div>
 
+      <div className='searchBox w-full flex justify-center mb-4'>
+        <input className='w-[60%] h-10 rounded-xl border bg-white !p-5'
+        placeholder='Search...'
+        onChange={handleOnChange}></input>
+      </div>
+
       <div className='buttonSearch flex flex-row gap-4 mb-4'>
         <button 
           className='bg-[#F06060] w-24 h-10 text-white px-4 py-2 rounded-md hover:bg-[#d94c4c] transition'
           onClick={() => handleSearch('bread')}
+          id='1'
         >Bread</button>
         <button 
           className='bg-[#F06060] w-24 h-10 text-white px-4 py-2 rounded-md hover:bg-[#d94c4c] transition'
           onClick={() => handleSearch('cake')}
+          id='1'
         >Cake</button>
         <button 
           className='bg-[#F06060] w-24 h-10 text-white px-4 py-2 rounded-md hover:bg-[#d94c4c] transition'
           onClick={() => handleSearch('pastry')}
+          id='1'
         >Pastry</button>
         <button 
           className='bg-[#F06060] w-24 h-10 text-white px-4 py-2 rounded-md hover:bg-[#d94c4c] transition'
           onClick={() => handleSearch('cookie')}
+          id='1'
         >Cookie</button>
         <button 
           className='bg-[#F06060] w-24 h-10 text-white px-4 py-2 rounded-md hover:bg-[#d94c4c] transition'
           onClick={() => handleSearch('donut')}
+          id='1'
         >Donut</button>
         <button 
-          className='bg-gray-400 w-24 h-10 text-white px-4 py-2 rounded-md hover:bg-gray-500 transition'
+          className='bg-[#F06060] w-24 h-10 text-white px-4 py-2 rounded-md hover:bg-gray-500 transition'
           onClick={() => handleSearch('all')}
+          id='1'
         >All</button>
       </div>
 
