@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import "./App.css";
 
@@ -17,6 +17,7 @@ function App() {
 
   const [editText, setEditText] = useState<string>("");
   const [isEdit, setIsEdit] = useState<number | null>(null);
+  const [searchText, setSearchText] = useState<string>("");
 
   const filter = ["All", "Active", "Completed"];
 
@@ -28,19 +29,17 @@ function App() {
   const handleAdd = (input: string) => {
     if (input.trim() === "") return alert("Please enter a valid todo item.");
 
-    setTodo((pre) => [...pre, { key: Date.now(), text: input, status: false }]);
+    const newTodo = { key: Date.now(), text: input, status: false };
+    setTodo((pre) => [...pre, newTodo]);
 
     if (isFilter === "Completed") {
       setIsFilter("All");
-      setFilter([...todo, { key: Date.now(), text: input, status: false }]);
+      setFilter([...todo, newTodo]);
       setInput("");
     } else {
-      setFilter([...todo, { key: Date.now(), text: input, status: false }]);
+      setFilter([...todo,newTodo]);
       setInput("");
     }
-
-    
-    
   };
 
   const handleChecked = (key: number) => {
@@ -75,7 +74,6 @@ function App() {
   };
 
   const handleFilter = (status: string) => {
-
     if (status === "Active") {
       setFilter(todo.filter((item) => item.status === false));
       setIsFilter(status);
@@ -87,6 +85,23 @@ function App() {
       setIsFilter(status);
     }
   };
+  const handleSearch = (text:string) => {
+    const rs = todo.filter((item) => item.text.toLowerCase().includes(text.toLowerCase()));
+    switch (isFilter) {
+      case "Active":
+        setFilter(rs.filter((item) => item.status === false));
+        break;
+      case "Completed":
+        setFilter(rs.filter((item) => item.status === true));
+        break;
+      default:
+        setFilter(rs);
+        break;
+    }
+  };
+
+  
+
   return (
     <>
       <div className="w-screen h-screen flex justify-center items-center bg-teal-200">
@@ -94,7 +109,7 @@ function App() {
           <h1 className="text-3xl font-bold text-cyan-600">TO DO LIST</h1>
           <div className="w-full flex flex-row justify-center items-center gap-2 !mt-5 flex-wrap">
             <input
-              className="w-[70%] h-12 border rounded-2xl shadow  !p-5"
+              className="w-[70%] h-12 border rounded-xl shadow  !p-5"
               placeholder="input here"
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -106,15 +121,27 @@ function App() {
               Add
             </button>
           </div>
+          <div className="w-[80%] flex justify-center items-center !mt-5">
+            <input
+              className="w-full h-12 border rounded-xl bg-white !p-5"
+              placeholder="Search..."
+              value={searchText}
+              onChange={(e) => {
+                setSearchText(e.target.value);
+                handleSearch(e.target.value);
+              }}
+            />
+          </div>
           <div className="w-full flex flex-row justify-center items-center !mt-5 gap-2 flex-wrap">
-            {filter.map((item: string) => (
+            {filter.map((status: string) => (
               <button
                 className=" max-w-full w-24 h-12 bg-lime-200 rounded-xl hover:bg-lime-300"
                 onClick={() => {
-                  handleFilter(item);
+                  setIsFilter(status);
+                  handleFilter(status);
                 }}
               >
-                {item}
+                {status}
               </button>
             ))}
           </div>
